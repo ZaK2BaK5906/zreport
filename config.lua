@@ -8,7 +8,9 @@ Config.Debug = false
 
 Config.Framework = 'ESX' -- ESX / QB / STANDALONE
 
-Config.UseNewStaffCheckMethod = false -- QBCORE et ESX UNIQUEMENT - true = vérifiera si un joueur est staff d'une autre manière
+Config.UseNewStaffCheckMethod = true -- QBCORE et ESX UNIQUEMENT - true = vérifiera si un joueur est staff d'une autre manière (RECOMMANDÉ pour ESX)
+
+Config.UseAcePermissions = false -- ESX UNIQUEMENT - true = utilisera aussi les ACE permissions en plus de xPlayer.getGroup()
 
 Config.QBPermissionsUpdate = false -- QBCORE UNIQUEMENT - mettez à true si vous avez la dernière mise à jour des permissions
 

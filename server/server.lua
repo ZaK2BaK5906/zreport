@@ -33,21 +33,39 @@ function IsPlayerAdmin(source)
         end
         return false
     elseif Config.Framework == 'ESX' then
-        if Config.UseNewStaffCheckMethod then
-            local xPlayer = ESX.GetPlayerFromId(source)
-            if xPlayer then
-                for _, group in pairs(Config.AdminGroups) do
-                    if xPlayer.getGroup() == group then
-                        return true
-                    end
-                end
+        local xPlayer = ESX.GetPlayerFromId(source)
+
+        -- Méthode 1: Vérifier avec xPlayer.getGroup() (RECOMMANDÉ pour ESX)
+        if xPlayer then
+            local playerGroup = xPlayer.getGroup()
+            if Config.Debug then
+                print('[ZReport] Groupe du joueur ' .. source .. ': ' .. tostring(playerGroup))
             end
-        else
+
             for _, group in pairs(Config.AdminGroups) do
-                if IsPlayerAceAllowed(source, 'group.' .. group) then
+                if playerGroup == group then
+                    if Config.Debug then
+                        print('[ZReport] Joueur ' .. source .. ' est admin (groupe: ' .. playerGroup .. ')')
+                    end
                     return true
                 end
             end
+        end
+
+        -- Méthode 2: Vérifier avec ACE permissions (optionnel)
+        if Config.UseAcePermissions then
+            for _, group in pairs(Config.AdminGroups) do
+                if IsPlayerAceAllowed(source, 'group.' .. group) then
+                    if Config.Debug then
+                        print('[ZReport] Joueur ' .. source .. ' est admin (ACE: group.' .. group .. ')')
+                    end
+                    return true
+                end
+            end
+        end
+
+        if Config.Debug then
+            print('[ZReport] Joueur ' .. source .. ' N\'EST PAS admin')
         end
         return false
     elseif Config.Framework == 'QB' then
@@ -446,6 +464,11 @@ end)
 RegisterNetEvent('zreport:server:checkAdmin', function()
     local source = source
     local isAdmin = IsPlayerAdmin(source)
+
+    if Config.Debug then
+        print('[ZReport Server] Vérification admin pour joueur ' .. source .. ': ' .. tostring(isAdmin))
+    end
+
     TriggerClientEvent('zreport:client:setAdminStatus', source, isAdmin)
 end)
 

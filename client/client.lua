@@ -112,7 +112,18 @@ RegisterNetEvent('zreport:client:setAdminStatus', function(status)
     isAdmin = status
 
     if Config.Debug then
-        print('[ZReport] Statut admin défini: ' .. tostring(isAdmin))
+        print('[ZReport Client] ========================================')
+        print('[ZReport Client] STATUT ADMIN: ' .. tostring(isAdmin))
+        print('[ZReport Client] ========================================')
+    end
+
+    -- Afficher aussi dans le chat
+    if status then
+        TriggerEvent('chat:addMessage', {
+            color = {52, 199, 89},
+            multiline = true,
+            args = {"ZReport", "Vous êtes administrateur - Utilisez /reports"}
+        })
     end
 end)
 
@@ -276,6 +287,23 @@ RegisterCommand(Config.NotificationToggleCommand, function()
             type = 'error'
         })
     end
+end, false)
+
+-- Commande de debug pour tester le statut admin
+RegisterCommand('zreportadmin', function()
+    print('[ZReport Debug] ========================================')
+    print('[ZReport Debug] Statut Admin: ' .. tostring(isAdmin))
+    print('[ZReport Debug] Framework: ' .. Config.Framework)
+    print('[ZReport Debug] ========================================')
+
+    TriggerEvent('chat:addMessage', {
+        color = {0, 122, 255},
+        multiline = true,
+        args = {"ZReport Debug", "Statut Admin: " .. tostring(isAdmin) .. " - Voir F8 pour plus de détails"}
+    })
+
+    -- Revérifier auprès du serveur
+    TriggerServerEvent('zreport:server:checkAdmin')
 end, false)
 
 -- ============================================
