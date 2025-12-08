@@ -50,16 +50,17 @@ end
 -- ============================================
 
 function ShowNotification(data)
-    if Config.Framework == 'ESX' then
+    -- Toujours envoyer à l'UI NUI aussi
+    SendNUIMessage({
+        action = 'showNotification',
+        data = data
+    })
+
+    -- Framework notifications
+    if Config.Framework == 'ESX' and ESX then
         ESX.ShowNotification(data.text)
-    elseif Config.Framework == 'QB' and Config.NewReportNotifyType == 'QB' then
+    elseif Config.Framework == 'QB' and Config.NewReportNotifyType == 'QB' and ESX then
         ESX.Functions.Notify(data.text, data.type, data.time)
-    else
-        -- Notification standalone
-        SendNUIMessage({
-            action = 'showNotification',
-            data = data
-        })
     end
 end
 

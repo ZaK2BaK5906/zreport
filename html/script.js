@@ -259,6 +259,12 @@ function sendChatMessage() {
     const message = input.value.trim();
 
     if (message.length === 0) return;
+    if (!currentReportId) {
+        console.error('[ZReport] Pas de report ID actif');
+        return;
+    }
+
+    console.log('[ZReport] Envoi du message:', message, 'pour le report:', currentReportId);
 
     fetch(`https://${GetParentResourceName()}/sendMessage`, {
         method: 'POST',
@@ -269,9 +275,12 @@ function sendChatMessage() {
             reportId: parseInt(currentReportId),
             message: message
         })
+    }).then(response => {
+        console.log('[ZReport] Réponse sendMessage:', response);
+        input.value = '';
+    }).catch(error => {
+        console.error('[ZReport] Erreur sendMessage:', error);
     });
-
-    input.value = '';
 }
 
 // Envoyer avec Enter
@@ -431,6 +440,12 @@ function sendAdminChatMessage() {
     const message = input.value.trim();
 
     if (message.length === 0) return;
+    if (!currentReportId) {
+        console.error('[ZReport Admin] Pas de report ID actif');
+        return;
+    }
+
+    console.log('[ZReport Admin] Envoi du message:', message, 'pour le report:', currentReportId);
 
     fetch(`https://${GetParentResourceName()}/sendMessage`, {
         method: 'POST',
@@ -441,9 +456,12 @@ function sendAdminChatMessage() {
             reportId: parseInt(currentReportId),
             message: message
         })
+    }).then(response => {
+        console.log('[ZReport Admin] Réponse sendMessage:', response);
+        input.value = '';
+    }).catch(error => {
+        console.error('[ZReport Admin] Erreur sendMessage:', error);
     });
-
-    input.value = '';
 }
 
 // Envoyer avec Enter
@@ -505,6 +523,7 @@ function renderChatMessages(containerId, messages) {
 // ============================================
 
 function updateReports(reports) {
+    console.log('[ZReport] Mise à jour des reports:', reports);
     allReports = reports;
 
     if (currentMode === 'player') {
@@ -520,6 +539,7 @@ function updateReports(reports) {
         }
 
         if (playerReport && document.getElementById('myReportView').style.display !== 'none') {
+            console.log('[ZReport] Mise à jour du report joueur:', playerReport);
             showMyReport(playerReport);
         }
     } else if (currentMode === 'admin') {
@@ -528,6 +548,7 @@ function updateReports(reports) {
         } else if (document.getElementById('adminReportDetailView').style.display !== 'none' && currentReportId) {
             const report = allReports[currentReportId];
             if (report) {
+                console.log('[ZReport Admin] Mise à jour du report:', report);
                 viewAdminReport(currentReportId);
             } else {
                 backToReportsList();
@@ -572,6 +593,15 @@ function escapeHtml(text) {
 }
 
 function GetParentResourceName() {
+    // Récupère le nom de la resource depuis l'URL
+    if (window.location.ancestorOrigins && window.location.ancestorOrigins[0]) {
+        let url = window.location.ancestorOrigins[0];
+        let match = url.match(/https?:\/\/([^\/]+)\/([^\/]+)\//);
+        if (match) {
+            return match[2];
+        }
+    }
+    // Fallback
     return 'zreport';
 }
 
