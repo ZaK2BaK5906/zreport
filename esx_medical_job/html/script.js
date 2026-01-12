@@ -108,6 +108,157 @@ if (window.location.protocol !== 'https:') {
 }
 
 // ===========================================
+// PROGRESS BAR 3D
+// ===========================================
+
+let progressBarId = 0;
+let activeProgressBars = {};
+
+function showProgressBar3D(label, duration, icon = 'fa-heartbeat') {
+    const id = progressBarId++;
+
+    const progressBar = $(`
+        <div class="progress-bar-3d animate__animated animate__zoomIn" data-id="${id}">
+            <div class="progress-label">${label}</div>
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar-fill" style="width: 0%">
+                    <div class="progress-percentage">0%</div>
+                </div>
+            </div>
+            <div class="progress-icon">
+                <i class="fas ${icon}"></i>
+            </div>
+        </div>
+    `);
+
+    $('#progress-container').append(progressBar);
+
+    // Animation de la progression
+    let progress = 0;
+    const increment = 100 / (duration / 50); // Mise à jour toutes les 50ms
+
+    activeProgressBars[id] = setInterval(() => {
+        progress = Math.min(progress + increment, 100);
+
+        progressBar.find('.progress-bar-fill').css('width', progress + '%');
+        progressBar.find('.progress-percentage').text(Math.floor(progress) + '%');
+
+        if (progress >= 100) {
+            clearInterval(activeProgressBars[id]);
+            delete activeProgressBars[id];
+
+            setTimeout(() => {
+                removeProgressBar3D(id);
+            }, 500);
+        }
+    }, 50);
+
+    return id;
+}
+
+function removeProgressBar3D(id) {
+    const progressBar = $(`.progress-bar-3d[data-id="${id}"]`);
+
+    if (activeProgressBars[id]) {
+        clearInterval(activeProgressBars[id]);
+        delete activeProgressBars[id];
+    }
+
+    progressBar.addClass('animate__zoomOut');
+
+    setTimeout(() => {
+        progressBar.remove();
+    }, 400);
+}
+
+function cancelProgressBar3D(id) {
+    removeProgressBar3D(id);
+}
+
+// ===========================================
+// INTERACTION 3D
+// ===========================================
+
+let interactionId = 0;
+
+function showInteraction3D(title, text, duration = 3000) {
+    const id = interactionId++;
+
+    const interaction = $(`
+        <div class="interaction-3d animate__animated animate__bounceIn" data-id="${id}">
+            <div class="interaction-title">${title}</div>
+            <div class="interaction-text">${text}</div>
+        </div>
+    `);
+
+    $('#interaction-container').append(interaction);
+
+    setTimeout(() => {
+        removeInteraction3D(id);
+    }, duration);
+
+    return id;
+}
+
+function removeInteraction3D(id) {
+    const interaction = $(`.interaction-3d[data-id="${id}"]`);
+
+    interaction.removeClass('animate__bounceIn').addClass('animate__bounceOut');
+
+    setTimeout(() => {
+        interaction.remove();
+    }, 400);
+}
+
+// ===========================================
+// GESTION DES ÉVÉNEMENTS NUI
+// ===========================================
+
+window.addEventListener('message', function(event) {
+    const data = event.data;
+
+    switch (data.action) {
+        case 'showNotification':
+            showNotification(data.message, data.type || 'info', data.duration || 5000);
+            break;
+
+        case 'showProgressBar':
+            showProgressBar3D(data.label, data.duration, data.icon);
+            break;
+
+        case 'cancelProgressBar':
+            if (data.id !== undefined) {
+                cancelProgressBar3D(data.id);
+            }
+            break;
+
+        case 'showInteraction':
+            showInteraction3D(data.title, data.text, data.duration);
+            break;
+
+        case 'hideAll':
+            // Supprimer toutes les notifications
+            $('.notification').each(function() {
+                const id = $(this).data('id');
+                removeNotification(id);
+            });
+
+            // Supprimer toutes les barres de progression
+            $('.progress-bar-3d').each(function() {
+                const id = $(this).data('id');
+                removeProgressBar3D(id);
+            });
+
+            // Supprimer toutes les interactions
+            $('.interaction-3d').each(function() {
+                const id = $(this).data('id');
+                removeInteraction3D(id);
+            });
+            break;
+    }
+});
+
+// ===========================================
 // EXPOSITION GLOBALE
 // ===========================================
 
@@ -116,4 +267,18 @@ window.MedicalNotifications = {
     remove: removeNotification,
 };
 
-console.log('ESX Medical Job - NUI chargée avec succès !');
+window.MedicalProgressBar = {
+    show: showProgressBar3D,
+    remove: removeProgressBar3D,
+    cancel: cancelProgressBar3D,
+};
+
+window.MedicalInteraction = {
+    show: showInteraction3D,
+    remove: removeInteraction3D,
+};
+
+console.log('🔬 Médecin Scientifique - NUI chargée avec succès !');
+console.log('✅ Notifications 3D activées');
+console.log('✅ Progress Bars 3D activées');
+console.log('✅ Interactions 3D activées');
