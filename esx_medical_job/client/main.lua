@@ -159,29 +159,43 @@ end
 -- ===========================================
 
 function CreateBlackMarket()
-    -- Créer le PED du marché noir
-    local pedModel = GetHashKey(Config.BlackMarket.ped.model)
-    RequestModel(pedModel)
-    while not HasModelLoaded(pedModel) do
-        Wait(10)
-    end
+    if not Config.BlackMarket or not Config.BlackMarket.enabled then return end
 
-    local ped = CreatePed(4, pedModel, Config.BlackMarket.ped.coords.x, Config.BlackMarket.ped.coords.y, Config.BlackMarket.ped.coords.z, Config.BlackMarket.ped.coords.w, false, true)
-    FreezeEntityPosition(ped, true)
-    SetEntityInvincible(ped, true)
-    SetBlockingOfNonTemporaryEvents(ped, true)
-
-    -- Ajouter ox_target au PED
-    exports.ox_target:addLocalEntity(ped, {
-        {
-            name = 'blackmarket_medical',
-            icon = 'fas fa-skull',
-            label = 'Marché Noir - Vendre échantillons',
-            onSelect = function()
-                OpenBlackMarketMenu()
+    -- Boucler sur toutes les locations du marché noir
+    for locationIndex, location in pairs(Config.BlackMarket.locations) do
+        if location.ped then
+            -- Créer le PED
+            local pedModel = GetHashKey(location.ped.model)
+            RequestModel(pedModel)
+            while not HasModelLoaded(pedModel) do
+                Wait(10)
             end
-        }
-    })
+
+            local ped = CreatePed(4, pedModel, location.ped.coords.x, location.ped.coords.y, location.ped.coords.z, location.ped.coords.w, false, true)
+            FreezeEntityPosition(ped, true)
+            SetEntityInvincible(ped, true)
+            SetBlockingOfNonTemporaryEvents(ped, true)
+
+            -- Scenario si défini
+            if location.ped.scenario then
+                TaskStartScenarioInPlace(ped, location.ped.scenario, 0, true)
+            end
+
+            -- Ajouter ox_target au PED
+            exports.ox_target:addLocalEntity(ped, {
+                {
+                    name = 'blackmarket_medical_' .. locationIndex,
+                    icon = 'fas fa-skull',
+                    label = 'Marché Noir - Vendre échantillons',
+                    onSelect = function()
+                        OpenBlackMarketMenu()
+                    end
+                }
+            })
+
+            print('^2[Medical]^7 Marché noir #' .. locationIndex .. ' créé')
+        end
+    end
 end
 
 -- ===========================================

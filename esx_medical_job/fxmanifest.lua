@@ -19,6 +19,7 @@ server_scripts {
 
 client_scripts {
     'client/utils.lua',
+    'client/medical_box.lua',
     'client/main.lua'
 }
 

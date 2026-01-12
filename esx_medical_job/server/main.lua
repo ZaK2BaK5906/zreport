@@ -410,6 +410,73 @@ AddEventHandler('onResourceStart', function(resourceName)
     end)
 end)
 
+-- ===========================================
+-- SYSTÈME BOÎTE MÉDICALE
+-- ===========================================
+
+RegisterNetEvent('esx_medical:removeMedicalBox')
+AddEventHandler('esx_medical:removeMedicalBox', function()
+    local xPlayer = ESX.GetPlayerFromId(source)
+    if not xPlayer then return end
+
+    -- Retirer le medikit_advanced de l'inventaire
+    exports.ox_inventory:RemoveItem(source, 'medikit_advanced', 1)
+
+    print(('[^2Medical Box^7] Player ^5%s^7 placed a medical box'):format(xPlayer.identifier))
+end)
+
+RegisterNetEvent('esx_medical:returnMedicalBox')
+AddEventHandler('esx_medical:returnMedicalBox', function()
+    local xPlayer = ESX.GetPlayerFromId(source)
+    if not xPlayer then return end
+
+    -- Rendre le medikit_advanced
+    exports.ox_inventory:AddItem(source, 'medikit_advanced', 1)
+
+    print(('[^3Medical Box^7] Player ^5%s^7 picked up a medical box'):format(xPlayer.identifier))
+end)
+
+RegisterNetEvent('esx_medical:takeFromBox')
+AddEventHandler('esx_medical:takeFromBox', function(itemName, quantity)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    if not xPlayer then return end
+
+    -- Vérifier le job
+    if xPlayer.job.name ~= Config.JobName then
+        print(('[^3WARNING^7] Player ^5%s^7 attempted to take from medical box without permission'):format(xPlayer.identifier))
+        return
+    end
+
+    -- Vérifier si le joueur peut porter l'item
+    local canCarry = exports.ox_inventory:CanCarryItem(source, itemName, quantity)
+
+    if canCarry then
+        -- Donner l'item
+        exports.ox_inventory:AddItem(source, itemName, quantity)
+
+        -- Notification
+        TriggerClientEvent('ox_lib:notify', source, {
+            title = 'Boîte Médicale',
+            description = 'Item pris : ' .. itemName,
+            type = 'success',
+            icon = 'briefcase-medical'
+        })
+
+        print(('[^2Medical Box^7] Player ^5%s^7 took %dx %s from medical box'):format(
+            xPlayer.identifier,
+            quantity,
+            itemName
+        ))
+    else
+        TriggerClientEvent('ox_lib:notify', source, {
+            title = 'Boîte Médicale',
+            description = 'Inventaire plein !',
+            type = 'error',
+            icon = 'briefcase-medical'
+        })
+    end
+end)
+
 AddEventHandler('onResourceStop', function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
 

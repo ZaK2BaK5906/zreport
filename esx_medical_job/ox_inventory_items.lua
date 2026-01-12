@@ -16,13 +16,15 @@ return {
     -- ===========================================
 
     ['medikit_advanced'] = {
-        label = 'Kit Médical Avancé',
-        weight = 500,
-        stack = true,
+        label = 'Boîte Médicale',
+        weight = 5000,
+        stack = false,
         close = true,
-        description = 'Kit médical professionnel pour soigner les patients',
+        description = 'Boîte médicale portable - Appuyez sur E pour poser | Contient tous les équipements médicaux',
         client = {
             image = 'medikit.png',
+            export = 'esx_medical_job.useMedikitAdvanced',
+            usetime = 1000,
         }
     },
 
