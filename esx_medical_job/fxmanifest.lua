@@ -14,12 +14,14 @@ shared_scripts {
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
+    'server/actions.lua',
     'server/main.lua'
 }
 
 client_scripts {
     'client/utils.lua',
     'client/medical_box.lua',
+    'client/actions.lua',
     'client/main.lua'
 }
 
