@@ -1,165 +1,182 @@
-# 🏥 ESX Medical Job - Script Médical Scientifique
+# 🔬 Médecin Scientifique - Job ESX
 
-> Script de job médical complet pour FiveM ESX avec ox_target, effets 3D, et système de prélèvements scientifiques légaux/illégaux.
-
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)
-![ESX](https://img.shields.io/badge/ESX-Legacy-orange.svg)
+Script de job médical scientifique **FULL OX** (ox_inventory + ox_target + ox_lib) avec NUI 3D custom ultra moderne !
 
 ---
 
-## 📋 Table des matières
+## 🚀 Installation Rapide
 
-- [Fonctionnalités](#-fonctionnalités)
-- [Prérequis](#-prérequis)
-- [Installation](#-installation)
-- [Configuration](#️-configuration)
-- [Utilisation](#-utilisation)
-- [Commandes](#-commandes)
-- [Actions disponibles](#-actions-disponibles)
-- [Captures d'écran](#-captures-décran)
-- [Support](#-support)
-
----
-
-## ✨ Fonctionnalités
-
-### 🩺 Actions Médicales Légales
-- **Soigner** - Restaure la santé d'un joueur
-- **Réanimer** - Ramène un joueur inconscient à la vie
-- **Examiner** - Diagnostique l'état de santé d'un patient
-- **Prélèvement de sang** - Collecte des échantillons sanguins
-
-### 🔬 Actions Scientifiques Illégales
-- **Endormir** - Met un joueur inconscient avec un sédatif
-- **Blesser** - Inflige des dégâts à un joueur
-- **Prélèvement d'os** - Collecte des échantillons osseux (marché noir)
-- **Prélèvement de peau** - Collecte des échantillons cutanés (marché noir)
-
-### 🎨 Effets Visuels 3D
-- **Texte 3D** flottant pour les interactions
-- **Barres de progression 3D** animées avec pourcentages
-- **Notifications NUI 3D** avec effets de glow
-- **Particules** et effets spéciaux
-- **Animations** réalistes pour chaque action
-- **Effets d'écran** (tremblements, flous, etc.)
-
-### 🏢 Système Complet
-- **Vestiaires** - Changement de tenue
-- **Pharmacie** - Achat d'équipement médical
-- **Laboratoire** - Analyse d'échantillons
-- **Garage** - Véhicules d'ambulance
-- **Marché noir** - Vente d'échantillons illégaux
-
-### 📊 Tracking & Statistiques
-- Suivi des actions médicales
-- Historique des prélèvements
-- Statistiques par médecin
-- Logs des ventes au marché noir
-
----
-
-## 📦 Prérequis
-
-Assurez-vous d'avoir installé les ressources suivantes :
-
-- **[es_extended](https://github.com/esx-framework/esx-legacy)** (ESX Legacy)
-- **[ox_target](https://github.com/overextended/ox_target)** (Système de ciblage)
-- **[ox_lib](https://github.com/overextended/ox_lib)** (Librairie UI)
-- **[oxmysql](https://github.com/overextended/oxmysql)** (MySQL)
-- **[skinchanger](https://github.com/esx-framework/esx-legacy)** (Changement de tenues)
-- **[esx_ambulancejob](https://github.com/esx-framework/esx-legacy)** (Pour la réanimation)
-
----
-
-## 🚀 Installation
-
-### 1. Téléchargement
-
-Clonez ou téléchargez ce dépôt dans votre dossier `resources` :
-
+### 1️⃣ Copier le script
 ```bash
 cd resources
-git clone [votre-repo] esx_medical_job
+git clone [URL] esx_medical_job
 ```
 
-### 2. Base de données
-
-Importez le fichier SQL dans votre base de données :
-
+### 2️⃣ SQL - Base de données
 ```bash
-mysql -u root -p votre_base < esx_medical_job/sql/install.sql
+mysql -u root -p nom_base < esx_medical_job/sql/install.sql
 ```
 
-Ou via phpMyAdmin :
-- Ouvrez phpMyAdmin
-- Sélectionnez votre base de données
-- Allez dans "Importer"
-- Sélectionnez le fichier `sql/install.sql`
-- Cliquez sur "Exécuter"
+### 3️⃣ OX_INVENTORY - Items
+Ouvrir `ox_inventory/data/items.lua` et copier le contenu de `ox_inventory_items.lua` dedans.
 
-### 3. Configuration du serveur
-
-Ajoutez la ressource dans votre `server.cfg` :
-
-```cfg
-ensure esx_medical_job
+**OU** remplacer directement :
+```bash
+cp esx_medical_job/ox_inventory_items.lua ox_inventory/data/items.lua
 ```
 
-⚠️ **Important** : Assurez-vous que la ressource est chargée APRÈS les dépendances :
-
+### 4️⃣ server.cfg
 ```cfg
 ensure es_extended
-ensure ox_target
-ensure ox_lib
 ensure oxmysql
+ensure ox_lib
+ensure ox_inventory
+ensure ox_target
 
 ensure esx_medical_job
 ```
 
-### 4. Redémarrage
-
-Redémarrez votre serveur ou utilisez :
-
+### 5️⃣ Redémarrer
 ```
+restart ox_inventory
 restart esx_medical_job
 ```
 
 ---
 
+## ✅ Fonctionnalités
+
+### 🩺 Actions Légales
+| Action | Grade | Item | Prix |
+|--------|-------|------|------|
+| Soigner | 0+ | medikit_advanced | +$800 |
+| Réanimer | 1+ | defib_pro | +$1500 |
+| Examiner | 0+ | stethoscope_digital | +$300 |
+| Prélever sang | 1+ | syringe_sterile | +$500 |
+
+### ⚠️ Actions Illégales (Marché Noir)
+| Action | Grade | Item | Prix |
+|--------|-------|------|------|
+| Endormir | 2+ | sedative_heavy | +$400 |
+| Prélever peau | 3+ | surgical_kit_basic | +$2500 |
+| Prélever os | 4+ | surgical_kit_advanced | +$3500 |
+| Prélever organe | 5+ | surgical_kit_advanced | +$5000 |
+| Blesser | 2+ | Aucun | Illégal |
+
+### 🎨 Effets 3D Custom
+- ✨ Notifications NUI glass morphism
+- 📊 Progress bars 3D néon cyan
+- 💥 Particules (électricité, sang, vapeur)
+- 📺 Screen effects (flash, blur, shake)
+- 🎬 Animations réalistes
+- 🌈 Design cyberpunk medical
+
+### 🏥 Système Complet
+- **3 Hôpitaux** (LS, Sandy, Paleto)
+- **Vestiaires** avec 3 tenues
+- **Pharmacie** 25+ items
+- **Laboratoire** analyses
+- **Garage** véhicules
+- **Boss menu** grade 5+
+- **2 Marchés noirs** (cachés)
+
+---
+
+## 🎯 Grades du Job
+
+```
+0. Stagiaire Médical      ($250/h)
+1. Infirmier              ($500/h)
+2. Médecin                ($800/h)
+3. Chirurgien             ($1200/h)
+4. Scientifique           ($1500/h)
+5. Chef Scientifique      ($2000/h)
+6. Directeur Médical      ($2500/h)
+```
+
+**Donner le job :**
+```sql
+UPDATE users SET job = 'medecin_scientifique', job_grade = 0 WHERE identifier = 'char1:xxx';
+```
+
+---
+
+## 📦 Structure
+
+```
+esx_medical_job/
+├── fxmanifest.lua
+├── config/
+│   └── config.lua              # Configuration complète
+├── client/
+│   ├── utils.lua               # Utilitaires 3D
+│   └── main.lua                # Code principal
+├── server/
+│   └── main.lua                # Serveur
+├── html/
+│   ├── ui.html                 # NUI
+│   ├── style.css               # CSS futuriste
+│   └── script.js               # JavaScript
+├── sql/
+│   └── install.sql             # Base de données
+└── ox_inventory_items.lua      # Items pour ox_inventory
+```
+
+---
+
+## 📊 Base de Données
+
+**Job créé :**
+- `medecin_scientifique` (whitelist)
+- 7 grades
+- Society account $50,000
+
+**Tables créées :**
+- `medecin_samples` - Prélèvements
+- `medecin_black_market` - Ventes marché noir
+- `medecin_stats` - Statistiques
+- `medecin_interventions` - Interventions
+- `medecin_lab_analysis` - Analyses
+
+**30+ items ox_inventory :**
+- Équipement médical
+- Médicaments/sédatifs
+- Équipement chirurgical
+- Matériel de prélèvement
+- Échantillons biologiques
+- Soins
+- Protection
+
+---
+
 ## ⚙️ Configuration
 
-Éditez le fichier `config/config.lua` pour personnaliser le script :
-
-### Paramètres généraux
+Modifier `config/config.lua` :
 
 ```lua
-Config.JobName = 'ambulance'  -- Nom du job
-Config.EnableLegalActions = true  -- Activer les actions légales
-Config.EnableIllegalActions = true  -- Activer les actions illégales
-```
+-- Job
+Config.JobName = 'medecin_scientifique'
 
-### Prix et gains
-
-```lua
+-- Prix
 Config.Prices = {
-    heal = 500,           -- Prix pour soigner
-    revive = 1000,        -- Prix pour réanimer
-    boneSample = 2500,    -- Gain marché noir (os)
-    skinSample = 1500,    -- Gain marché noir (peau)
+    heal = 800,
+    revive = 1500,
+    boneSample = 3500,  -- Marché noir
+    -- ...
 }
-```
 
-### Hôpitaux
+-- Effets 3D
+Config.Effects3D = {
+    text = { enabled = true },
+    progressBar = { enabled = true },
+    particles = { enabled = true },
+    -- ...
+}
 
-Ajoutez ou modifiez les positions des hôpitaux dans `Config.Hospitals` :
-
-```lua
-{
-    name = "Mon Hôpital",
-    blip = {coords = vector3(x, y, z), sprite = 61, color = 2},
-    cloakroom = {coords = vector3(x, y, z), size = vector3(2, 2, 2)},
-    pharmacy = {coords = vector3(x, y, z), size = vector3(2, 2, 2)},
+-- NUI
+Config.NUI = {
+    enabled = true,
+    position = 'top-right',
     -- ...
 }
 ```
@@ -168,235 +185,137 @@ Ajoutez ou modifiez les positions des hôpitaux dans `Config.Hospitals` :
 
 ## 🎮 Utilisation
 
-### En jeu - Pour les médecins
+### In-Game
 
-1. **Prendre son service** : Allez au vestiaire et équipez-vous
-2. **Acheter de l'équipement** : Rendez-vous à la pharmacie
-3. **Interagir avec les patients** : Utilisez **ox_target** (œil) sur un joueur
-4. **Choisir une action** : Sélectionnez l'action dans le menu
+1. **Prendre service** : Vestiaire → Changer tenue
+2. **Acheter équipement** : Pharmacie → Acheter items
+3. **Soigner patients** : ox_target sur joueur → Choisir action
 
-### Actions disponibles
+### Interactions
 
-| Action | Touche | Condition |
-|--------|--------|-----------|
-| Soigner | ox_target | Patient vivant |
-| Réanimer | ox_target | Patient mort |
-| Examiner | ox_target | Tout patient |
-| Endormir | ox_target | Patient vivant |
-| Prélèvement | ox_target | Selon le type |
+Toutes les actions se font via **ox_target** (œil) :
+- Viser un joueur
+- Menu s'affiche
+- Cliquer sur l'action
+- Progress bar 3D + effets
 
-### Marché noir
+### Marché Noir
 
-1. Rendez-vous au point de marché noir (coordonnées dans config)
-2. Interagissez avec le PED scientifique
-3. Vendez vos échantillons illégaux
+Localisations secrètes (pas de blip) :
+- Nord de Sandy Shores
+- Docks Sud
+
+Vendre échantillons illégaux → Argent sale
 
 ---
 
-## 💻 Commandes
+## 🐛 Dépannage
 
-### Commandes Admin
-
-```
-/medicheal [id]    - Soigner un joueur (Admin)
-/medicrevive [id]  - Réanimer un joueur (Admin)
+**Interactions ox_target ne marchent pas :**
+```bash
+ensure ox_target
+restart esx_medical_job
 ```
 
----
+**Items n'apparaissent pas :**
+1. Vérifier ox_inventory_items.lua copié
+2. Redémarrer ox_inventory
+3. Vérifier F8 pour erreurs
 
-## 🎯 Actions disponibles
+**Notifications 3D invisibles :**
+1. Vérifier ox_lib installé
+2. F8 → Erreurs JavaScript ?
+3. Config.NUI.enabled = true ?
 
-### 🩺 Actions Légales
-
-#### Soigner
-- **Item requis** : `medikit`
-- **Durée** : 8 secondes
-- **Effet** : Restaure 100% de santé
-- **Rémunération** : $500
-- **Animations** : Soin médical
-- **Effets** : Particules électriques, barre de progression 3D
-
-#### Réanimer
-- **Item requis** : `defib`
-- **Durée** : 15 secondes
-- **Effet** : Réanime le joueur
-- **Rémunération** : $1000
-- **Animations** : RCP + Défibrillateur
-- **Effets** : Écran électrique, vibrations, particules
-
-#### Examiner
-- **Item requis** : `stethoscope`
-- **Durée** : 6 secondes
-- **Effet** : Affiche un rapport médical complet
-- **Rémunération** : $200
-- **Informations** : Santé, armure, état général
-
-#### Prélèvement sanguin
-- **Item requis** : `syringe`
-- **Durée** : 7 secondes
-- **Effet** : Donne 1x `blood_sample`
-- **Rémunération** : $800
-
-### ⚠️ Actions Illégales
-
-#### Endormir
-- **Item requis** : `sedative`
-- **Durée** : 5 secondes
-- **Effet** : Met le joueur en ragdoll pendant 10s
-- **Effets** : Écran hallucinatoire
-
-#### Blesser
-- **Item requis** : Aucun
-- **Durée** : 4 secondes
-- **Effet** : -50 HP
-- **Conséquences** : Alerte police
-
-#### Prélèvement d'os
-- **Item requis** : `surgical_kit`
-- **Durée** : 12 secondes
-- **Effet** : Donne 1x `bone_sample`
-- **Vente** : $2500 (marché noir)
-- **Conséquences** : Enregistré dans la base de données
-
-#### Prélèvement de peau
-- **Item requis** : `surgical_kit`
-- **Durée** : 10 secondes
-- **Effet** : Donne 1x `skin_sample`
-- **Vente** : $1500 (marché noir)
-- **Conséquences** : Enregistré dans la base de données
-
----
-
-## 📸 Captures d'écran
-
-### Effets Visuels
-
-- ✅ Texte 3D flottant au-dessus des patients
-- ✅ Barre de progression 3D avec pourcentage animé
-- ✅ Notifications NUI 3D avec effets de glow
-- ✅ Particules et effets spéciaux
-- ✅ Animations réalistes
-- ✅ Effets d'écran (tremblements, flous)
-
----
-
-## 🗂️ Structure des fichiers
-
-```
-esx_medical_job/
-│
-├── fxmanifest.lua           # Manifest du script
-│
-├── config/
-│   └── config.lua           # Configuration complète
-│
-├── client/
-│   ├── utils.lua            # Utilitaires 3D (texte, progress bar, effets)
-│   └── main.lua             # Code client principal
-│
-├── server/
-│   └── main.lua             # Code serveur
-│
-├── html/
-│   ├── ui.html              # Interface NUI
-│   ├── style.css            # Styles CSS modernes
-│   └── script.js            # JavaScript NUI
-│
-├── sql/
-│   └── install.sql          # Base de données
-│
-└── README.md                # Documentation
+**Erreur SQL :**
+```bash
+# Vérifier ordre de chargement server.cfg
+# ESX → oxmysql → ox → esx_medical_job
 ```
 
 ---
 
-## 🔧 Dépannage
+## 📝 Prérequis
 
-### Les interactions ox_target ne fonctionnent pas
-- Vérifiez que `ox_target` est bien démarré
-- Assurez-vous d'être dans le job `ambulance`
-- Redémarrez la ressource : `restart esx_medical_job`
+**Obligatoires :**
+- ✅ [es_extended](https://github.com/esx-framework/esx_core) v1.9+
+- ✅ [ox_inventory](https://github.com/overextended/ox_inventory) v2.0+
+- ✅ [ox_target](https://github.com/overextended/ox_target) v1.0+
+- ✅ [ox_lib](https://github.com/overextended/ox_lib) v3.0+
+- ✅ [oxmysql](https://github.com/overextended/oxmysql)
 
-### Les notifications ne s'affichent pas
-- Vérifiez que `ox_lib` est installé et démarré
-- Vérifiez les erreurs dans la console F8
-
-### Les items ne s'ajoutent pas
-- Vérifiez que les items sont bien dans votre base de données
-- Importez à nouveau le fichier SQL
-- Redémarrez le serveur
-
-### Erreur "attempt to index a nil value"
-- Vérifiez que tous les prérequis sont installés
-- Assurez-vous que `es_extended` est en version Legacy
-- Vérifiez l'ordre de chargement dans `server.cfg`
+**Recommandées :**
+- esx_ambulancejob (réanimation)
+- skinchanger (tenues)
+- esx_billing (factures)
 
 ---
 
-## 📝 Base de données
+## 🔐 Sécurité
 
-### Tables créées
+**Actions illégales enregistrées :**
+- Prélèvements os/peau/organes
+- Ventes marché noir
+- Sédations
 
-- `medical_samples` - Suivi des prélèvements
-- `medical_black_market` - Historique des ventes
-- `medical_stats` - Statistiques des médecins
+**Logs SQL :**
+```sql
+SELECT * FROM medecin_illegal_activity;
+SELECT * FROM medecin_black_market;
+```
 
-### Vues créées
-
-- `medical_stats_view` - Statistiques agrégées
-- `medical_illegal_samples_view` - Prélèvements illégaux
-- `medical_black_market_view` - Vue du marché noir
-
-### Procédures stockées
-
-- `GetMedicStats(medic_id)` - Récupère les stats d'un médecin
-- `GetMedicSamples(medic_id)` - Récupère les prélèvements
-- `CleanOldMedicalData()` - Nettoie les données >30 jours
+**Anti-cheat :**
+- Vérifications côté serveur
+- Vérification grades
+- Anti-spam intégré
 
 ---
 
-## 🤝 Support
+## 📊 Statistiques
 
-Pour toute question ou problème :
+**Top médecins :**
+```sql
+CALL GetTopMedics(10);
+```
 
-1. Vérifiez la section [Dépannage](#-dépannage)
-2. Consultez les logs serveur et console F8
-3. Créez une issue sur GitHub
+**Performance :**
+```sql
+SELECT * FROM medecin_performance_stats WHERE medic_identifier = 'char1:xxx';
+```
 
----
-
-## 📜 Licence
-
-Ce script est distribué sous licence MIT.
-
----
-
-## 👨‍💻 Auteur
-
-Créé avec ❤️ pour la communauté FiveM ESX
+**Marché noir :**
+```sql
+SELECT * FROM medecin_black_market_stats;
+```
 
 ---
 
-## 🙏 Remerciements
+## 💡 Features
 
-- **ESX Framework** pour le framework
-- **Overextended** pour ox_target et ox_lib
-- La communauté FiveM pour le support
-
----
-
-## 📅 Changelog
-
-### Version 1.0.0 (2026-01-12)
-- ✨ Release initiale
-- ✅ Actions médicales complètes (soigner, réanimer, examiner)
-- ✅ Système de prélèvements scientifiques
-- ✅ Marché noir fonctionnel
-- ✅ Effets 3D (texte, barres, notifications)
-- ✅ Intégration ox_target
-- ✅ Système de statistiques
-- ✅ Base de données complète
+✅ **Job complet** - 7 grades avec salaires
+✅ **OX Full** - ox_inventory + ox_target + ox_lib
+✅ **30+ items** - Équipement médical/chirurgical
+✅ **NUI 3D** - Notifications + Progress bars custom
+✅ **Glass morphism** - Design moderne
+✅ **Marché noir** - Vente échantillons illégaux
+✅ **SQL avancé** - Triggers + Procédures + Vues
+✅ **Anti-cheat** - Vérifications serveur
+✅ **Logs complets** - Tracking toutes actions
+✅ **3 Hôpitaux** - LS + Sandy + Paleto
+✅ **Effets 3D** - Particules + Animations
 
 ---
 
-**Bon jeu ! 🎮**
+## 📞 Support
+
+Pour aide :
+1. Lire cette doc
+2. Vérifier INSTALL.md
+3. Checker les logs (F8 + serveur)
+4. Créer une issue GitHub
+
+---
+
+**Made with ❤️ for FiveM ESX Community**
+
+🎮 **Ready to use - Plug & Play !**
